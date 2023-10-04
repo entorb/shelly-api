@@ -8,7 +8,9 @@ import json
 
 import requests
 
-from credentials import password, shelly1_ip as shelly_ip, username
+from credentials import password
+from credentials import shelly1_ip as shelly_ip
+from credentials import username
 
 # public endpoint with no auth required
 # url = f"http://{shelly_ip}/shelly"
@@ -46,10 +48,13 @@ try:
         watt_now = float(data["power"])
         # Total energy consumed by the attached electrical appliance in Watt-minute
         total = float(data["total"])
+        kWh_total = round(total / 60 / 1000, 3)
+        # print(kWh_total)
         # Energy counter value for the last 3 round minutes in Watt-minute
         watt_past_minutes = [float(x) for x in data["counters"]]
         # print(watt_past_minutes)
         # Timestamp of the last energy counter value, with the applied timezone
+        # TM: No, actually it is the current timestamp, not the timestamp related to past counters!   # noqa: E501
         timestamp = int(data["timestamp"])
 
     else:
