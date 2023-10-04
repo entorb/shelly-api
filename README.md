@@ -1,6 +1,6 @@
 # shelly-api
 
-Example Python code for accessing the API of (password-protected) Shelly devices
+Example Python (3.10) code for accessing the API of (password-protected) Shelly devices.
 
 Written for Shelly Plug S and Plus Plug S according to [API gen1 spec](https://shelly-api-docs.shelly.cloud/gen1/#shelly-plug-plugs-meter-0) and [API gen2 spec](https://shelly-api-docs.shelly.cloud/gen2/General/Authentication).
 
@@ -9,10 +9,11 @@ Motivation: Shelly Plug S does not support local MQTT connection in parallel to 
 Note: Password protection/authentication is activated in my devices, hence needed here as well.
 
 * `credentials.py` set Shelly IP and login credentials
-* `read_api_v1.py` example code for Shelly API v1 (Plug S)
-* `read_api_v2.py` example code for Shelly API v2 (Plus Plug S)
+* `read_api_v1.py` example code for Shelly Plug S using API gen1
+* `read_api_v2.py` example code for Shelly Plus Plug S using API gen2
 
 ## Features
 
-* [x] Shelly API v1 with basic authentication
-* [ ] Shelly API v2 with authentication
+* [x] access Shelly Plug S API gen1 via basic authentication
+* [x] access Shelly Plus Plug S API gen2 via digest authentication / [RFC7616](https://datatracker.ietf.org/doc/html/rfc7616)
+* [x] read meter power and energy data
