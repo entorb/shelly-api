@@ -3,22 +3,23 @@ Access API gen2 of Shelly device (Plus Plug S) using digest auth.
 
 see https://shelly-api-docs.shelly.cloud/gen2/General/Authentication
 """
-# import time
-import random
+import hashlib
 import json
 
-import hashlib
+# import time
+import random
+
 import requests
 
-from credentials import shelly2_ip as shelly_ip, username, password
+from credentials import password
+from credentials import shelly2_ip as shelly_ip
+from credentials import username
 
 # public endpoint with no auth required
 # api_url = f"http://{shelly_ip}/shelly"
 
 url = f"http://{shelly_ip}/rpc"
-method = "Shelly.GetStatus"
 method = "Switch.GetStatus"
-method_arg = "id=0"
 
 payload_401 = {
     "id": 1,
@@ -69,7 +70,6 @@ except Exception as e:
 
 
 # 2. request step 2 using SHA-256
-print("Start Step 2")
 try:
     auth_parts = [username, data_401["realm"], password]
     # Concatenate the auth_parts with ':' and compute the SHA-256 hash
@@ -106,16 +106,22 @@ try:
     if response.status_code == 200:
         data = json.loads(response.text)
         data = data["result"]
-        print(data)
+        # print(data)
 
         # Last measured instantaneous active power (in Watts) delivered to the attached load   # noqa: E501
         watt_now = float(data["apower"])
         # Total energy consumed in Watt-hours
-        kWh_total = float(data["aenergy"]["total"])
+        kWh_total = round(float(data["aenergy"]["total"] / 1000), 3)
         # Energy consumption by minute (in Milliwatt-hours) for the last three minutes
         past_minutes = [float(x) for x in data["aenergy"]["by_minute"]]
+        # Convert to avg watt per min
+        watt_past_minutes = [x * 60 / 1000 for x in past_minutes]
+        # print(watt_now, watt_past_minutes)
+
         # Unix timestamp of the first second of the last minute
+        # TM: No, actually it is the current timestamp, not the timestamp related to past counters!   # noqa: E501
         timestamp = int(data["aenergy"]["minute_ts"])
+        print(timestamp)
         # Temperature in Celsius (null if temperature is out of the measurement range)
         temp = float(data["temperature"]["tC"])
 
