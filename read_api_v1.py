@@ -22,7 +22,7 @@ from credentials import username
 
 # read meter data
 # see https://shelly-api-docs.shelly.cloud/gen1/#shelly-plug-plugs-status
-url = f"http://{shelly_ip}/meter/0"
+shelly_url = f"http://{shelly_ip}/meter/0"
 
 # creating session with http basic auth
 session = requests.Session()
@@ -35,7 +35,7 @@ session.auth = (username, password)
 
 
 try:
-    response = session.get(url, timeout=3)
+    response = session.get(shelly_url, timeout=3)
 
     if response.status_code == 200:
         # print(response.text)
@@ -44,23 +44,22 @@ try:
         print(data)
         # write_data_to_file(data)
 
-        # Current real AC power being drawn, in Watts
+        # extract and convert relevant data
+        # api spec: Current real AC power being drawn, in Watts
         watt_now = float(data["power"])
-        # Total energy consumed by the attached electrical appliance in Watt-minute
+        # api spec: Total energy consumed by the attached electrical appliance in Watt-minute  # noqa: E501
         total = float(data["total"])
         kWh_total = round(total / 60 / 1000, 3)
-        # print(kWh_total)
-        # Energy counter value for the last 3 round minutes in Watt-minute
+        # api spec: Energy counter value for the last 3 round minutes in Watt-minute
         watt_past_minutes = [float(x) for x in data["counters"]]
-        # print(watt_past_minutes)
-        # Timestamp of the last energy counter value, with the applied timezone
+        # api spec: Timestamp of the last energy counter value, with the applied timezone  # noqa: E501
         # TM: No, actually it is the current timestamp, not the timestamp related to past counters!   # noqa: E501
         timestamp = int(data["timestamp"])
 
     else:
         print(
-            f"Failed to access the API. Status code: {response.status_code}, text: {response.text}",  # noqa: E501
+            f"Error: Failed to access the API. Status code: {response.status_code}, text: {response.text}",  # noqa: E501
         )
 
 except requests.exceptions.RequestException as e:
-    print(f"An error occurred: {str(e)}")
+    print(f"Error: {str(e)}")
