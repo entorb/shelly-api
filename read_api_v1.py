@@ -8,9 +8,8 @@ import json
 
 import requests
 
-from credentials import password
+from credentials import password, username
 from credentials import shelly1_ip as shelly_ip
-from credentials import username
 
 # public endpoint with no auth required
 # url = f"http://{shelly_ip}/shelly"
@@ -37,7 +36,7 @@ session.auth = (username, password)
 try:
     response = session.get(shelly_url, timeout=3)
 
-    if response.status_code == 200:
+    if response.status_code == 200:  # noqa: PLR2004
         # print(response.text)
         # convert response to dict
         data = json.loads(response.text)
@@ -49,7 +48,7 @@ try:
         watt_now = float(data["power"])
         # api spec: Total energy consumed by the attached electrical appliance in Watt-minute  # noqa: E501
         total = float(data["total"])
-        kWh_total = round(total / 60 / 1000, 3)
+        kWh_total = round(total / 60 / 1000, 3)  # noqa: N816
         # api spec: Energy counter value for the last 3 round minutes in Watt-minute
         watt_past_minutes = [float(x) for x in data["counters"]]
         # api spec: Timestamp of the last energy counter value, with the applied timezone  # noqa: E501
@@ -62,4 +61,4 @@ try:
         )
 
 except requests.exceptions.RequestException as e:
-    print(f"Error: {str(e)}")
+    print(f"Error: {e!s}")
