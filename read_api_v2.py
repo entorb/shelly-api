@@ -3,17 +3,19 @@ Access API gen2 of Shelly device (Plus Plug S) using digest auth.
 
 see https://shelly-api-docs.shelly.cloud/gen2/General/Authentication
 """
+
 import hashlib
 import json
-
-# import time
 import random
+import sys
 
 import requests
 
-from credentials import password
+from credentials import password, username
 from credentials import shelly2_ip as shelly_ip
-from credentials import username
+
+# import time
+
 
 # public endpoint with no auth required
 # api_url = f"http://{shelly_ip}/shelly"
@@ -51,22 +53,22 @@ try:
         json=payload_401,
         # data=json.dumps(payload_401),
     )
-    if response.status_code == 401:
+    if response.status_code == 401:  # noqa: PLR2004
         # print(response.headers)
         data_401 = extract_data_from_401(dict(response.headers))
     else:
         print(
             f"Failed to access the API. Status code: {response.status_code}, text: {response.text}",  # noqa: E501
         )
-        exit()
+        sys.exit()
     # print(data_401)
 
 except requests.exceptions.RequestException as e:
-    print(f"An error occurred: {str(e)}")
-    exit()
-except Exception as e:
-    print(f"An error occurred: {str(e)}")
-    exit()
+    print(f"An error occurred: {e!s}")
+    sys.exit()
+except Exception as e:  # noqa: BLE001
+    print(f"An error occurred: {e!s}")
+    sys.exit()
 
 
 # 2. request via digest auth
@@ -103,7 +105,7 @@ try:
     response = requests.post(f"http://{shelly_ip}/rpc", json=d, timeout=3)
     res = json.loads(response.text)
 
-    if response.status_code == 200:
+    if response.status_code == 200:  # noqa: PLR2004
         data = json.loads(response.text)
         data = data["result"]
         print(data)
@@ -112,7 +114,7 @@ try:
         # api spec: Last measured instantaneous active power (in Watts) delivered to the attached load   # noqa: E501
         watt_now = float(data["apower"])
         # api spec: Total energy consumed in Watt-hours
-        kWh_total = round(float(data["aenergy"]["total"] / 1000), 3)
+        kWh_total = round(float(data["aenergy"]["total"] / 1000), 3)  # noqa: N816
         # api spec: Energy consumption by minute (in Milliwatt-hours) for the last three minutes  # noqa: E501
         past_minutes = [float(x) for x in data["aenergy"]["by_minute"]]
         # convert to avg watt per min
@@ -127,9 +129,9 @@ try:
         print(
             f"Error: Failed to access the API. Status code: {response.status_code}, text: {response.text}",  # noqa: E501
         )
-        exit()
+        sys.exit()
 
 except requests.exceptions.RequestException as e:
-    print(f"Error in Request: {str(e)}")
-except Exception as e:
-    print(f"Error: {str(e)}")
+    print(f"Error in Request: {e!s}")
+except Exception as e:  # noqa: BLE001
+    print(f"Error: {e!s}")
