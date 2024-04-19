@@ -37,11 +37,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-      - name: run pre-commit hooks
-        uses: pre-commit/action@v3.0.1
+          pip install ruff pre-commit
 
       - name: check versions
         run: |
           python --version
           ruff --version
+
+      - name: run pre-commit hooks
+        uses: pre-commit/action@v3.0.1
