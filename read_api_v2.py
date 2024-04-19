@@ -20,7 +20,7 @@ from credentials import shelly2_ip as shelly_ip
 # public endpoint with no auth required
 # api_url = f"http://{shelly_ip}/shelly"
 
-shelly_url = f"http://{shelly_ip}/rpc"
+URL_SHELLY = f"http://{shelly_ip}/rpc"
 method = "Switch.GetStatus"
 
 payload_401 = {
@@ -48,7 +48,7 @@ def extract_data_from_401(response_header: dict[str, str]) -> dict[str, str]:
 # 1. request without auth, get a onetime-no and http 401
 try:
     response = requests.post(
-        shelly_url,
+        URL_SHELLY,
         timeout=3,
         json=payload_401,
         # data=json.dumps(payload_401),
