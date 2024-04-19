@@ -21,7 +21,7 @@ from credentials import shelly1_ip as shelly_ip
 
 # read meter data
 # see https://shelly-api-docs.shelly.cloud/gen1/#shelly-plug-plugs-status
-shelly_url = f"http://{shelly_ip}/meter/0"
+URL_SHELLY = f"http://{shelly_ip}/meter/0"
 
 # creating session with http basic auth
 session = requests.Session()
@@ -34,7 +34,7 @@ session.auth = (username, password)
 
 
 try:
-    response = session.get(shelly_url, timeout=3)
+    response = session.get(URL_SHELLY, timeout=3)
 
     if response.status_code == 200:  # noqa: PLR2004
         # print(response.text)
