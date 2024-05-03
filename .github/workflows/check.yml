@@ -27,16 +27,14 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Python cache set up
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.pythonLocation }}
-          key: ${{ env.pythonLocation }}-py-cache
-
-      - name: Install dependencies
+      - name: Add empty creds file # to prevent pre-commit from failing at import ordering
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          touch credentials.py
 
       - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.1
+
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
