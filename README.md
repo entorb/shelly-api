@@ -1,6 +1,6 @@
 # shelly-api
 
-Example Python (3.12) code for accessing the API of (password-protected) Shelly devices.
+Example Python (3.13) code for accessing the API of (password-protected) Shelly devices.
 
 Written for Shelly Plug S and Plus Plug S according to [API gen1 spec](https://shelly-api-docs.shelly.cloud/gen1/#shelly-plug-plugs-meter-0) and [API gen2 spec](https://shelly-api-docs.shelly.cloud/gen2/General/Authentication).
 
