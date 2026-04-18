@@ -1,4 +1,4 @@
-name: Check Python Project
+name: Check Code Python Project
 
 on:
   workflow_dispatch:
