@@ -33,20 +33,18 @@ jobs:
         with:
           node-version: 24
 
+      - name: Run prek pre-commit
+        uses: j178/prek-action@v2
+
+      - name: Run markdownlint
+        run: npm exec markdownlint-cli2 "**/*.md"
+
+      - name: Run cspell
+        run: npm exec cspell-cli --gitignore --unique --silent .
+
       - name: Add empty creds file # to prevent pre-commit from failing at import ordering
         run: |
           touch credentials.py
-
-      - name: Cache pre-commit envs
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
-
-      - name: Run pre-commit
-        run: |
-          pip install pre-commit
-          pre-commit run --all-files
 
       # - name: Install dependencies
       #   run: |
