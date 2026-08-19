@@ -4,3 +4,4 @@ cnonce
 Milliwatt
 prek
 rumdl
+shfmt
