@@ -1,0 +1,10 @@
+.DS_Store
+.vscode/
+/.pytest_cache/
+/.ruff_cache/
+/.rumdl_cache/
+/.venv/
+__pycache__/
+credentials.py
+cspell-words-missing.txt
+out.json
